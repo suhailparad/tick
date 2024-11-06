@@ -1,15 +1,35 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "tick-server/index.js",   
-        "use": "@vercel/node"               
+  "version": 2,
+  "builds": [
+    {
+      "src": "tick-front/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "tick-front/dist"
       }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "tick-server/index.js"    
-      }
-    ]
-  }
+    },
+    {
+      "src": "tick-server/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "tick-server/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "tick-front/dist/$1"
+    },
+    {
+      "src": "/",
+      "dest": "tick-front/dist/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "tick-front/dist/index.html",
+      "status": 200
+    }
+  ]
+}
