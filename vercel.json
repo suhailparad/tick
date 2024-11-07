@@ -1,5 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/(.*)", "destination": "tick-front/dist/index.html" }
-  ]
-}
