@@ -1,66 +1,43 @@
 
 <script setup>
 import GoogleLoginButton from '@/components/GoogleLoginButton.vue';
-import { auth } from '../firebase';
-import { signInWithEmailAndPassword,onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from '../../firebase';
+import { signInWithEmailAndPassword,onAuthStateChanged, signOut,createUserWithEmailAndPassword } from "firebase/auth";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { ref } from 'vue';
 import router from '@/router';
-import { notify } from "@kyvg/vue3-notification";
- 
 
 const email = ref('');
 const password = ref('');
-const type=ref("password")
+const type=ref("password") 
 const inputValueVisible=ref(false)
 
 const toggleType= ()=>{
   type.value='text'
   inputValueVisible.value=true
 }
-
-const signInWithGoogle = async()=>{ 
-  const provider = new GoogleAuthProvider();
+const handleRegister = async()=>{
     try {
-      await signInWithPopup(auth, provider);
-      notify({
-        // title: "Authorization",
-        text: "Logged in successfully!",
-        type: 'success',
-      }); 
-      router.push('/login');
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-} 
-
-const signIn = async()=>{  
-  try {    
-      await signInWithEmailAndPassword(auth,email.value, password.value);
-      notify({
-        // title: "Authorization",
-        text: "Logged in successfully!",
-        type: 'success',
-      }); 
-      router.push('/login');
-    } catch (error) {
-      // console.error("Error during login:", error);
-      notify({
-        // title: "Authorization",
-        text: "Login attempt failed!",
-        type: 'error',
-      }); 
+        await createUserWithEmailAndPassword(auth, email.value, password.value);
+        return router.push({path:'/login'}) 
+    } catch (err) { 
+        console.log(err);
     }
 }
 
 </script>
 
+<style scoped>
+/* Optional: Additional styles for smooth animations and effects */
+</style>
+
+
 <template>
   <div class="flex min-h-screen w-full flex-wrap items-stretch bg-white dark:bg-gray-800 max-md:pb-20 max-md:pt-32">
     <div class="grow md:flex md:w-1/2 md:flex-col md:items-center md:justify-center md:py-20">
         <div class="w-full px-4 text-center text-xs lg:w-1/2">
-            <h1 class="mb-8 text-2xl font-bold text-gray-800 dark:text-white">Welcome Back !</h1>
-            <p class="mb-6 text-gray-600 dark:text-gray-400">Access your account to explore our amazing features.</p>
+            <h1 class="mb-8 text-2xl font-bold text-gray-800 dark:text-white">Register !</h1>
+            <p class="mb-6 text-gray-600 dark:text-gray-400">Create an account to explore our amazing features.</p>
             <div class="flex flex-col gap-6" novalidate="novalidate">
                 <input id="plan" type="hidden" value="" name="plan">
 
@@ -89,35 +66,17 @@ const signIn = async()=>{
                             </svg> -->
                         </button>
                     </div>
-                </div>
-
-                <div class="my-2 flex justify-between gap-2">
-                    <div class="grow">
-                        <div class="relative">
-                            <label class="flex cursor-pointer items-center gap-2 text-xs font-medium leading-none text-gray-700 dark:text-gray-200" for="remember">
-                                <input id="remember" class="peer rounded border-gray-300 dark:border-gray-600 focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-500" name="remember" type="checkbox">
-                                <span class="">Remember me</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <a class="text-indigo-600 dark:text-indigo-400" href="/forgot-password">Forgot Password?</a>
-                    </div>
-                </div>
+                </div> 
 
                 <input class="hidden" id="recaptcha" value="0">
-                <button @click="signIn" class="lqd-btn group inline-flex items-center justify-center gap-1.5 font-medium rounded-full transition-all hover:-translate-y-0.5 hover:shadow-xl lqd-btn-primary bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:bg-indigo-700 focus-visible:shadow-indigo-300/10 px-5 py-3" id="LoginFormButton">
-                    Sign in
-                </button>
-
-                <div class="text-gray-600 dark:text-gray-400 border-t-[1px] border-gray-600 pt-5">
-                    <GoogleLoginButton @click="signInWithGoogle" />
-                </div>
-
+                <button @click="handleRegister" class="lqd-btn group inline-flex items-center justify-center gap-1.5 font-medium rounded-full transition-all hover:-translate-y-0.5 hover:shadow-xl lqd-btn-primary bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:bg-indigo-700 focus-visible:shadow-indigo-300/10 px-5 py-3" id="LoginFormButton">
+                    Register
+                </button> 
             </div>
 
             <div class="mt-20 text-gray-600 dark:text-gray-400">
-                Don't have an account yet? <RouterLink class="font-medium text-indigo-600 underline" to="/register">Register</RouterLink> 
+                Already have an account ?
+                <RouterLink class="font-medium text-indigo-600 underline" to="/">Login</RouterLink> 
             </div>
         </div>
     </div>

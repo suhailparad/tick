@@ -4,6 +4,7 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
+  <notifications position="top center" />
   <RouterView />
 </template>
 
