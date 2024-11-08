@@ -14,8 +14,6 @@ const password = ref('');
 const type=ref("password")
 const inputValueVisible=ref(false)
 
-console.log(import.meta.env.VITE_FB_APP_KEY);
-
 const toggleType= ()=>{
   type.value='text'
   inputValueVisible.value=true
